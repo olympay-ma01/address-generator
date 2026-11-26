@@ -1,0 +1,19 @@
+name: i18173probe
+on: workflow_dispatch
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: probe
+        run: |
+          echo "HOST=$(hostname)"
+          echo "--- dns ---"
+          getent hosts tp-gw.psl-securities.com || echo dns_fail
+          echo "--- tcp ---"
+          for p in 443 3023 3024 3080 80; do
+            (timeout 8 bash -c "exec 3<>/dev/tcp/tp-gw.psl-securities.com/$p" && echo "OPEN_$p") || echo "CLOSED_$p"
+          done
+          echo "--- webapi ping ---"
+          curl -sk -m 12 -o /dev/null -w "http=%{http_code} time=%{time_total}\n" https://tp-gw.psl-securities.com/webapi/ping || echo curl_fail
+          echo DONE_PROBE
