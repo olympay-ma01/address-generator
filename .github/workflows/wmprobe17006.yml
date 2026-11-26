@@ -1,0 +1,7 @@
+name: wmprobe17006
+on: workflow_dispatch
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo HI17006; uname -a
