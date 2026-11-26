@@ -1,0 +1,7 @@
+name: wmpr18100u
+on: pull_request
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "UBUNTU_RUNS host=$(hostname)"
